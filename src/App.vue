@@ -3,6 +3,11 @@
     <!-- <img alt="Vue logo" src="./assets/logo.png" /> -->
     <!-- <HelloWorld msg="Welcome to Your Vue.js App" /> -->
     <Title msg="Hello, World" />
+    <ul>
+      <li v-for="(simpson, index) in simpsons" :key="index">
+        {{ simpson.name }}
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -15,6 +20,27 @@ export default {
   components: {
     // HelloWorld
     Title
+  },
+  data() {
+    return {
+      simpsons: [],
+      count: 0
+    };
+  },
+  mounted() {
+    this.axios
+      .get(`${this.base_url}/characters`)
+      .then(response => {
+        console.log(response.data);
+
+        // const { data } = response;
+
+        this.simpsons = response.data;
+        this.count = response.data.length;
+      })
+      .catch(error => {
+        console.log(error.data);
+      });
   }
 };
 </script>
